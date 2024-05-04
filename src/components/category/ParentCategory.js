@@ -195,36 +195,141 @@ const ParentCategory = ({
 
   // for now this is working will change later on depending upon the datas being fetch from the backends
 
+  // const handleSelect = (key) => {
+  //   const findCategoryAndChildren = (categories, key) => {
+  //     let foundCategories = [];
+  //     for (const category of categories) {
+  //       if (category._id === key) {
+  //         foundCategories.push({
+  //           _id: category._id,
+  //           name: showingTranslateValue(category?.parent, lang),
+  //         });
+  //       }
+  //       if (category.children && category.children.length > 0) {
+  //         foundCategories = foundCategories.concat(
+  //           findCategoryAndChildren(category?.children, key)
+  //         );
+  //       }
+  //     }
+
+  //     return foundCategories;
+  //   };
+  //   const foundCategories = findCategoryAndChildren(data, key);
+  //   const newCategories = foundCategories.filter(
+  //     (cat) => !selectedCategory.some((value) => value._id === cat._id)
+  //   );
+  //   if (newCategories.length > 0) {
+  //     setSelectedCategory((prev) => [...prev, ...newCategories]);
+  //     setDefaultCategory(newCategories);
+  //   } else {
+  //     notifySuccess("This category or its children are already selected!");
+  //   }
+  // };
+
+
+
+
+
+
+
+  //  Almost Works
+  // const handleSelect = (key) => {
+  //   const findCategoryAndChildren = (categories, key) => {
+  //     let foundCategories = [];
+  //     for (const category of categories) {
+  //       if (category._id === key) {
+  //         foundCategories.push({
+  //           _id: category._id,
+  //           name: showingTranslateValue(category?.parent, lang),
+  //         });
+  //         // If category has children, select them too
+  //         if (category.children && category.children.length > 0) {
+  //           for (const child of category.children) {
+  //             foundCategories.push({
+  //               _id: child._id,
+  //               name: showingTranslateValue(child, lang),
+  //             });
+  //           }
+  //         }
+  //       }
+  //       if (category.children && category.children.length > 0) {
+  //         foundCategories = foundCategories.concat(
+  //           findCategoryAndChildren(category?.children, key)
+  //         );
+  //       }
+  //     }
+
+  //     return foundCategories;
+  //   };
+
+  //   const foundCategories = findCategoryAndChildren(data, key);
+  //   const newCategories = foundCategories.filter(
+  //     (cat) => !selectedCategory.some((value) => value._id === cat._id)
+  //   );
+  //   if (newCategories.length > 0) {
+  //     setSelectedCategory((prev) => [...prev, ...newCategories]);
+  //     setDefaultCategory(newCategories);
+  //   } else {
+  //     notifySuccess("This category or its children are already selected!");
+  //   }
+  // };
+
+  //  Almost Works completely now works
+  // const handleSelect = (key) => {
+  //   const category = data.find((category) => category._id === key);
+
+  //   // Check if the category is already selected
+  //   const isSelected = selectedCategory.some((category) => category._id === key);
+
+  //   if (isSelected) {
+  //     // If the category is already selected, remove it
+  //     setSelectedCategory((prev) => prev.filter((category) => category._id !== key));
+  //   } else {
+  //     // If the category is not selected, add it
+  //     setSelectedCategory((prev) => [...prev, { _id: category._id, name: showingTranslateValue(category?.parent, lang) }]);
+
+  //     // If the category has children, add them too
+  //     if (category.children && category.children.length > 0) {
+  //       const childrenToAdd = category.children.map((child) => ({
+  //         _id: child._id,
+  //         name: showingTranslateValue(child, lang)
+  //       }));
+  //       setSelectedCategory((prev) => [...prev, ...childrenToAdd]);
+  //     }
+  //   }
+  // };
+
   const handleSelect = (key) => {
-    const findCategoryAndChildren = (categories, key) => {
-      let foundCategories = [];
-      for (const category of categories) {
-        if (category._id === key) {
-          foundCategories.push({
-            _id: category._id,
-            name: showingTranslateValue(category?.parent, lang),
-          });
-        }
-        if (category.children && category.children.length > 0) {
-          foundCategories = foundCategories.concat(
-            findCategoryAndChildren(category?.children, key)
-          );
+    const category = data.find((category) => category._id === key);
+
+    // Check if the category is already selected
+    const isSelected = selectedCategory.some((category) => category._id === key);
+
+    if (isSelected) {
+      // If the category is already selected, remove it
+      setSelectedCategory((prev) => prev.filter((category) => category._id !== key));
+    } else {
+      // If the category is not selected, add it
+      setSelectedCategory((prev) => [...prev, { _id: category._id, name: showingTranslateValue(category?.parent, lang) }]);
+
+      // If the category has children, prompt the user to select them
+      if (category.children && category.children.length > 0) {
+        const shouldSelectChildren = notifySuccess("Do you want to select all children categories?");
+        if (shouldSelectChildren) {
+          const childrenToAdd = category.children.map((child) => ({
+            _id: child._id,
+            name: showingTranslateValue(child, lang)
+          }));
+          setSelectedCategory((prev) => [...prev, ...childrenToAdd]);
         }
       }
-
-      return foundCategories;
-    };
-    const foundCategories = findCategoryAndChildren(data, key);
-    const newCategories = foundCategories.filter(
-      (cat) => !selectedCategory.some((value) => value._id === cat._id)
-    );
-    if (newCategories.length > 0) {
-      setSelectedCategory((prev) => [...prev, ...newCategories]);
-      setDefaultCategory(newCategories);
-    } else {
-      notifySuccess("This category or its children are already selected!");
     }
   };
+
+
+
+
+
 
 
   const handleRemove = (v) => {

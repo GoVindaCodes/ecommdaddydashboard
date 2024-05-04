@@ -30,7 +30,7 @@ const ProductTable = ({ products, isCheck, setIsCheck, currency, lang, globalSet
   const { title, serviceId, handleModalOpen, handleUpdate } = useToggleDrawer();
   // const { data, loading } = useAsync(ProductServices.getAllProducts);
   // const { data, loading } = useAsync(CurrencyServices.getShowingCurrency);
-
+  // console.log("table sayss hi :", products)
   const handleClick = (e) => {
     const { id, checked } = e.target;
     console.log("id", id, checked);
@@ -146,10 +146,10 @@ const ProductTable = ({ products, isCheck, setIsCheck, currency, lang, globalSet
             <TableCell>
               {/* new schema changes over here added by Govinda */}
               <span className="text-sm">{product.quantity}</span>
-              <span className="text-sm">{product.stock}</span>
+              {/* <span className="text-sm">{product.stock}</span> */}
             </TableCell>
             <TableCell>
-              {product.stock > 0 ? (
+              {product.quantity > 0 ? (
                 <Badge type="success">{t("Selling")}</Badge>
               ) : (
                 <Badge type="danger">{t("SoldOut")}</Badge>

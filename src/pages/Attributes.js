@@ -232,24 +232,25 @@ const Attributes = () => {
         </CardBody>
       </Card>
 
-      {false
-        // loading 
-        ? (
-          <TableLoading row={12} col={6} width={180} height={20} />
-        ) :
-        // serviceData?.length !== 0 
-        true
+      {
+        // false
+        loading
           ? (
-            <TableContainer className="mb-8">
-              <Table>
-                <TableHeader>
-                  <tr>
-                    <TableCell>
-                      {/* <button onClick={handleSelectAll}>{'.'}</button> */}
+            <TableLoading row={12} col={6} width={180} height={20} />
+          ) :
+          serviceData?.length !== 0
+            // true
+            ? (
+              <TableContainer className="mb-8">
+                <Table>
+                  <TableHeader>
+                    <tr>
+                      <TableCell>
+                        {/* <button onClick={handleSelectAll}>{'.'}</button> */}
 
-                      {/* Added div for now to see if its working checkbox is nnot working properly */}
+                        {/* Added div for now to see if its working checkbox is nnot working properly */}
 
-                      {/* <div
+                        {/* <div
                         // type="checkbox"
                         // name="selectAll"
                         // id="selectAll"
@@ -257,49 +258,49 @@ const Attributes = () => {
                         onClick={handleSelectAll}
                       // isChecked={isCheckAll}
                       > */}
-                      <CheckBox type="checkbox"
-                        name="selectAll"
-                        id="selectAll"
-                        handleClick={handleSelectAll}
-                        // onClick={handleSelectAll}
-                        isChecked={isCheckAll} />
-                      {/* </div> */}
-                    </TableCell>
-                    <TableCell> {t("Id")} </TableCell>
-                    {/* <TableCell> {t("title")} </TableCell> */}
-                    <TableCell> {t("AName")}</TableCell>
-                    <TableCell> {t("ADisplayName")}</TableCell>
-                    <TableCell>{t("AOption")}</TableCell>
+                        <CheckBox type="checkbox"
+                          name="selectAll"
+                          id="selectAll"
+                          handleClick={handleSelectAll}
+                          // onClick={handleSelectAll}
+                          isChecked={isCheckAll} />
+                        {/* </div> */}
+                      </TableCell>
+                      <TableCell> {t("Id")} </TableCell>
+                      {/* <TableCell> {t("title")} </TableCell> */}
+                      <TableCell> {t("AName")}</TableCell>
+                      <TableCell> {t("ADisplayName")}</TableCell>
+                      <TableCell>{t("AOption")}</TableCell>
 
-                    <TableCell className="text-center">{t("catPublishedTbl")}</TableCell>
-                    {/* just for now commented for the backends datas */}
-                    {/* <TableCell className="text-center">{t("Avalues")}</TableCell> */}
+                      <TableCell className="text-center">{t("catPublishedTbl")}</TableCell>
+                      {/* just for now commented for the backends datas */}
+                      {/* <TableCell className="text-center">{t("Avalues")}</TableCell> */}
 
-                    <TableCell className="text-right">{t("AAction")}</TableCell>
-                  </tr>
-                </TableHeader>
+                      <TableCell className="text-right">{t("AAction")}</TableCell>
+                    </tr>
+                  </TableHeader>
 
-                <AttributeTable
-                  lang={lang}
-                  isCheck={isCheck}
-                  setIsCheck={setIsCheck}
-                  // now this reflects in the search
-                  attributes={dataTable}
-                // attributes={data}
-                />
-              </Table>
-              <TableFooter>
-                <Pagination
-                  totalResults={totalResults}
-                  resultsPerPage={resultsPerPage}
-                  onChange={handleChangePage}
-                  label="Table navigation"
-                />
-              </TableFooter>
-            </TableContainer>
-          ) : (
-            <NotFound title="Sorry, There are no attributes right now." />
-          )}
+                  <AttributeTable
+                    lang={lang}
+                    isCheck={isCheck}
+                    setIsCheck={setIsCheck}
+                    // now this reflects in the search
+                    attributes={dataTable}
+                  // attributes={data}
+                  />
+                </Table>
+                <TableFooter>
+                  <Pagination
+                    totalResults={totalResults}
+                    resultsPerPage={resultsPerPage}
+                    onChange={handleChangePage}
+                    label="Table navigation"
+                  />
+                </TableFooter>
+              </TableContainer>
+            ) : (
+              <NotFound title="Sorry, There are no attributes right now." />
+            )}
     </>
   );
 };

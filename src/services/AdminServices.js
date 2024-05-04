@@ -303,6 +303,7 @@ import requests from "./httpService";
 
 const AdminServices = {
   registerAdmin: async (body) => {
+    console.log("datas after registration: ", body)
     return requests.post("/api/admin/register", body);
   },
 

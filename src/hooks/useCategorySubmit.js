@@ -50,13 +50,14 @@ const useCategorySubmit = (id, data) => {
         return timestamp + randomPart;
       };
       // justt temporary data is heree 
+
       const categoryData = {
-        _id: generateCustomId(), // Use a function to generate a unique ID or provide a specific ID value
-        children: [], // Assuming no children by default; modify as needed
-        parent: name, // Match frontend `checked` to backend `parent`
-        type: description, // Replace with the correct type value
-        icon: imageUrl || 'default_icon_url', // Replace with a valid default icon URL
-        status: published ? 'Show' : 'Hide', // Match frontend `published` to backend `status`
+        _id: generateCustomId(),
+        children: [],
+        parent: name,
+        type: description,
+        icon: imageUrl || 'default_icon_url',
+        status: published ? 'Show' : 'Hide',
       };
 
 

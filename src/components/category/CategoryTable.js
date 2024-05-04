@@ -29,10 +29,10 @@ const CategoryTable = ({
   setIsCheck,
   useParamId,
   showChild,
-  serviceId,
-  title,
+  // serviceId,
+  // title,
 }) => {
-  const { handleModalOpen, handleUpdate } = useToggleDrawer();
+  const { title, serviceId, handleModalOpen, handleUpdate } = useToggleDrawer();
 
   const handleClick = (e) => {
     const { id, checked } = e.target;
@@ -61,7 +61,7 @@ const CategoryTable = ({
   //   };
   //   fetchData();
   // }, []);
-
+  console.log("categories: ", categories)
   return (
     <>
       {isCheck?.length < 1 && (
@@ -171,8 +171,8 @@ const CategoryTable = ({
               />
             </TableCell>
             <TableCell>
-              <EditDeleteButtons
-                id={category?._id}
+              <EditDeleteButton
+                id={category._id}
                 parent={category?.parent}
                 isCheck={isCheck}
                 children={category?.children}

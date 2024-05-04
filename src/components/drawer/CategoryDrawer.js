@@ -1,4 +1,5 @@
 import { Input } from "@windmill/react-ui";
+import ParentCategory from "components/category/ParentCategory";
 import DrawerButton from "components/form/DrawerButton";
 import Error from "components/form/Error";
 import InputArea from "components/form/InputArea";
@@ -8,13 +9,14 @@ import TextAreaCom from "components/form/TextAreaCom";
 import Title from "components/form/Title";
 import Uploader from "components/image-uploader/Uploader";
 import useCategorySubmit from "hooks/useCategorySubmit";
+import useProductSubmit from "hooks/useProductSubmit";
 import Tree from "rc-tree";
 import React from "react";
 import Scrollbars from "react-custom-scrollbars-2";
 import { useTranslation } from "react-i18next";
 //internal import
 import CategoryServices from "services/CategoryServices";
-import { notifyError } from "utils/toast";
+import { notifyError, notifySuccess } from "utils/toast";
 import { showingTranslateValue } from "utils/translate";
 
 const CategoryDrawer = ({ id, data, lang }) => {
@@ -36,6 +38,13 @@ const CategoryDrawer = ({ id, data, lang }) => {
     handleSelectLanguage,
     isSubmitting,
   } = useCategorySubmit(id, data);
+
+  const {
+    language,
+    selectedCategory,
+    setSelectedCategory,
+    setDefaultCategory,
+  } = useProductSubmit(id, data);
 
   // console.log("image=======>", imageUrl);
 
@@ -156,35 +165,117 @@ const CategoryDrawer = ({ id, data, lang }) => {
       );
   };
 
-  const handleSelect = async (key) => {
-    //console.log('key', key, 'id', id, 'data', data);
-    if (key === undefined) return;
-    if (id) {
-      const parentCategoryId = await CategoryServices.getCategoryById(key);
+  // const handleSelect = async (key) => {
+  //   console.log('key', key, 'id', id, 'data', data);
+  //   if (key === undefined) return;
+  //   if (id) {
+  //     const parentCategoryId = await CategoryServices.getCategoryById(key);
 
-      if (id === key) {
-        return notifyError("This can't be select as a parent category!");
-      } else if (id === parentCategoryId.parentId) {
-        return notifyError("This can't be select as a parent category!");
-      } else {
-        if (key === undefined) return;
+  //     if (id === key) {
+  //       return notifyError("This can't be select as a parent category!");
+  //     } else if (id === parentCategoryId.parentId) {
+  //       return notifyError("This can't be select as a parent category!");
+  //     } else {
+  //       if (key === undefined) return;
+  //       setChecked(key);
+
+  //       const obj = data[0];
+  //       const result = findObject(obj, key);
+
+  //       setSelectCategoryName(showingTranslateValue(result?.parent, lang));
+  //     }
+  //   } else {
+  //     if (key === undefined) return;
+  //     setChecked(key);
+
+  //     const obj = data[0];
+  //     const result = findObject(obj, key);
+
+  //     setSelectCategoryName(showingTranslateValue(result?.parent, lang));
+  //   }
+  // };
+
+  const handleSelect = async (key) => {
+    try {
+      // If key is undefined, return early
+      if (key === undefined) return;
+
+      // If id is defined, perform additional checks
+      if (id) {
+        // Retrieve the parent category ID asynchronously
+        const parentCategoryId = await CategoryServices.getCategoryById(key);
+
+        // Check if key matches the id or parentId of the current category
+        if (id === key || id === parentCategoryId.parentId) {
+          return notifyError("This can't be selected as a parent category!");
+        }
+        // Check if the parentCategoryId's parentId matches the id of the current category
+        else if (parentCategoryId.parentId === id) {
+          return notifyError("This category is already a parent category!");
+        }
+        else {
+          // Set the key as checked
+          setChecked(key);
+
+          // Find the object in data array with the specified key
+          const obj = data.find(item => item.id === key);
+          if (obj) {
+            // Set the category name based on translation
+            setSelectCategoryName(showingTranslateValue(obj.parent, lang));
+          } else {
+            console.error(`Category object with id ${key} not found in data array.`);
+          }
+        }
+      }
+      else {
+        // If id is not defined, simply set the key as checked
         setChecked(key);
 
-        const obj = data[0];
-        const result = findObject(obj, key);
-
-        setSelectCategoryName(showingTranslateValue(result?.parent, lang));
+        // Find the object in data array with the specified key
+        const obj = data.find(item => item.id === key);
+        if (obj) {
+          // Set the category name based on translation
+          setSelectCategoryName(showingTranslateValue(obj.parent, lang));
+        } else {
+          console.error(`Category object with id ${key} not found in data array.`);
+        }
       }
-    } else {
-      if (key === undefined) return;
-      setChecked(key);
-
-      const obj = data[0];
-      const result = findObject(obj, key);
-
-      setSelectCategoryName(showingTranslateValue(result?.parent, lang));
+    } catch (error) {
+      console.error("An error occurred:", error);
+      // Optionally handle the error here
     }
   };
+
+
+
+  //  for using productdrawer selectCategories
+
+  // const handleSelect = (key) => {
+  //   const category = data.find((category) => category._id === key);
+
+  //   // Check if the category is already selected
+  //   const isSelected = selectedCategory.some((category) => category._id === key);
+
+  //   if (isSelected) {
+  //     // If the category is already selected, remove it
+  //     setSelectedCategory((prev) => prev.filter((category) => category._id !== key));
+  //   } else {
+  //     // If the category is not selected, add it
+  //     setSelectedCategory((prev) => [...prev, { _id: category._id, name: showingTranslateValue(category?.parent, lang) }]);
+
+  //     // If the category has children, prompt the user to select them
+  //     if (category.children && category.children.length > 0) {
+  //       const shouldSelectChildren = notifySuccess("Do you want to select all children categories?");
+  //       if (shouldSelectChildren) {
+  //         const childrenToAdd = category.children.map((child) => ({
+  //           _id: child._id,
+  //           name: showingTranslateValue(child, lang)
+  //         }));
+  //         setSelectedCategory((prev) => [...prev, ...childrenToAdd]);
+  //       }
+  //     }
+  //   }
+  // };
 
   return (
     <>
@@ -266,6 +357,18 @@ const CategoryDrawer = ({ id, data, lang }) => {
                 </div>
               </div>
             </div>
+
+            {/* <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+              <LabelArea label={t("Category")} />
+              <div className="col-span-8 sm:col-span-4">
+                <ParentCategory
+                  lang={language}
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                  setDefaultCategory={setDefaultCategory}
+                />
+              </div>
+            </div> */}
 
             <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
               <LabelArea label={t("CategoryIcon")} />

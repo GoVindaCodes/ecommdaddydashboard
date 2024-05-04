@@ -219,7 +219,9 @@ const Uploader = ({ setImageUrl, imageUrl, product, folder }) => {
             </button>
           </div>
         ) : (
-          thumbs
+          // Added Null for now to make it works
+          null
+          // thumbs
         )}
       </aside>
     </div>

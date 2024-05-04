@@ -110,7 +110,7 @@ const useProductSubmit = (id) => {
       setSku(data.sku);
       setOriginalPrice(data.originalPrice);
       // const selectedCategory = [{ "_id": "61b0d3975741dd2e949d53ff", "name": "Snacks & Instant" }];
-
+      console.log("selected Categories : ", selectedCategory)
       // Extracting just the names from the selectedCategory array
       const categoryNames = selectedCategory.map(category => category.name);
       const generateCustomId = () => {
@@ -134,7 +134,9 @@ const useProductSubmit = (id) => {
         quantity: data.stock,
         flashsale: data.flashsale,
         // barcode: data.barcode,
-        image: data.imageUrl,
+        // commenting this out works amazingly now 
+        // image: data.imageUrl,
+        image: imageUrl,
         stock: data.stock,
         // tag: data.isArray(data.tag) ? data.tag : [],
         tag: JSON.stringify(categoryNames),
